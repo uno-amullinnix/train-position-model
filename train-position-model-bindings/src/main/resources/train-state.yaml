@@ -11,10 +11,24 @@ info:
 paths: {}
 components:
   schemas:
-    PTCTrainData:
+    PTCSubdivisionData:
       type: object
       properties:
-        ptcLocomotiveId:
+        subdivisionId: 
+          $ref: '#/components/schemas/SubdivisionIdType'
+        subdivisionName:
+          type: string
+        lastTrainReporting:
+          $ref: '#/components/schemas/TrainStateType'
+        milepostSegmentStateList:
+          description: 'A list of every MainTrack Mile Segment and all its included state'
+          type: array
+          items:
+            $ref: '#/components/schemas/MilepostSegmentStateType'  
+    TrainStateType:
+      type: object
+      properties:
+        ptcLeadLocomotiveId:
           type: string
           example: UP3060
           description: "The locomotive's Id associated with this train data"
@@ -46,19 +60,6 @@ components:
               type: string
               example: '2019-07-29'
               description: 'The actual year, month and day that a train began its scheduled trip from its origination point, formatted YYYY-MM-DD'
-        operativeBrakesCount:
-          description: 'The number of operative brakes (from Loco Segment 2032)'
-          type: integer
-          example: 107
-        operativeAxlesCount:
-          description: 'The number of operative axles that excludes the locomotive list from power consist (from Loco Segment 2032)'
-          type: integer
-          example: 440
-        totalBrakingForce:
-          description: 'The total braking force in pounds for the train excluding the locomotive list from power consist (from Loco Segment 2032)'
-          type: integer
-          format: int64
-          example: 1914539
         maximumTrainSpeed:
           description: 'The maximum train speed in MPH (from Loco Segment 2032). If there is no equipment speed restriction associated with the train then this value is populated with zero.'
           type: integer
@@ -80,12 +81,12 @@ components:
           type: integer
           example: 8078
         lastReportedPosition:
-          $ref: '#/components/schemas/LocomotivePositionReport'
+          $ref: '#/components/schemas/TrainPositionReport'
         positionHistoryList:
-          description: 'List of recent location reports'
+          description: 'List of recent location reports, ordered by time'
           type: array
           items:
-            $ref: '#/components/schemas/LocomotivePositionReport'
+            $ref: '#/components/schemas/TrainPositionReport'
         locomotiveList:
           description: 'The Locomotives associated with this Train'
           type: array
@@ -103,114 +104,61 @@ components:
           description: 'The list contains the calculated position of the train iterations based on its last reported position.'
           type: array
           items:
-            $ref: '#/components/schemas/LocomotivePositionReport'          
+            $ref: '#/components/schemas/TrainPositionReport'          
       required:
       - ptcLocomotiveId
 
-    LocomotiveSystemState:
-      description: >-
-        Defines the system state of the locomotive onboard system. <br>
-          [see WCR-ICD-1214 sec 1.6.7 (2010) Locomotive System State for full definition]
-      type: object
-      properties:
-        locomotiveStateSummary:
-          type: integer
-          example: 1
-          description: >- 
-            Indicates if this is the controlling locomotive
-              * 0 - Not Used
-              * 1 - Controlling
-              * 2 - Non Controlling
-        locomotiveState:
-          type: integer
-          example: 5
-          description: >- 
-            The current operational state of this locomotive
-              * 0 - Not Used
-              * 1 - Self Test
-              * 2 - Initializing
-              * 3 - Disengaged
-              * 4 - Cut Out
-              * 5 - Active
-              * 6 - Switching
-              * 7 - Failed
-        locomotiveStateTimestamp:
-          type: string
-          format: date-time
-          example: '2020-09-15T18:43:43.000Z'
-          description: 'The Timestamp the most recent state was generated (in UTC)'
-          
-    LocomotivePositionReport:
+    TrainPositionReport:
       description: >- 
-        Defines a Position Report made by a Locomotive PTC Onboard System. <br>
-        [see WCR-ICD-1214 sec 1.6.31 (2080) Locomotive Position Report]
+        The Location and Speed of a given train at a given time
       type: object
       properties:
-        speed:
-          description: 'Train speed in MPH'
-          type: integer
-          example: '47'
-        directionOfTravel:
-          description: >- 
-            Indicates whether the train is travelling along the track with increasing or decreasing mileposts.
-              * 0 - Unknown
-              * 1 - Increasing Mileposts
-              * 2 - Decreasing Mileposts
-          type: integer
-          example: 1
-        headEndLocation:
-           $ref: '#/components/schemas/PTCLocationData'
-        rearEndLocation:
-           $ref: '#/components/schemas/PTCLocationData'
-        positionUncertainty:
-          type: number
-          description: 'Current position uncertainty in FEET'
-          example: 17
         positionTime:        
           description: 'The date and time (in UTC) of the train position.'
           type: string
           format: date-time
           example: '2021-02-19T18:38:58.477Z'
-        offsetInFeet:
-          description: 'The calculated offset position in feet for Best Estimated of Position (BEoP).'
+        speedMPH:
+          description: >- 
+            'Train speed AND DIRECTION in MPH.
+            POSTIIVE => Milepost Increasing
+            NEGATIVE => Milepost Decreasing
+            ZERO => STOPPED'
+          type: integer
+          example: '-47'
+        milepostLocation:
+          $ref: '#/components/schemas/MilepostLocationType'
+        reversing:
+          description: ' Indicates that the train is moving backwards (e.g., the lead locomotive is pushing the train - this is very uncommon).'
           type: number
-          format: float
+          format: boolean
       required: 
-      - speed
+      - positionTime
       
-    PTCLocationData:
+    MilepostLocationType:
       description: 'Details of a Location on the rail network. If the locomotive does not have a track location, the head end and rear end location fields are populated with zero.'
       type: object
       properties:
-        railroadSCAC:
-          type: string
-          description: 'The SCAC code associated with ther railroad controlling this location.'
-          example: UP
         subdivisionId:
           $ref: '#/components/schemas/SubdivisionIdType'
         trackName: 
           $ref: '#/components/schemas/TrackNameType'
-        locationMilepost:
+        milepost:
          $ref: '#/components/schemas/MilepostType'
-        directionOfTravel:
-          description: >- 
-            Indicates whether the train is travelling along the track with increasing or decreasing mileposts.
-              * 0 - Unknown
-              * 1 - Increasing Mileposts
-              * 2 - Decreasing Mileposts
-          type: integer
-          example: 1
       required:
       - subdivisionId
+      - trackName
+      - locationMilepost
     
     MilepostType:
       type: object
       properties:
-        milepost:
+        milepostNumber:
           type: number
           format: float
-          description: 'The nearest milepost for this Location'
-          example: 58.8017
+          description: >-
+            The milepost location of this location such that 101.25 => 1/4 of the distance between 101 and 102 note - this does NOT signify a distance of 1/4 mile!  The distance between milepost markers varies at roughly around a mile, but the marker location is not guaranteed to be at exactly a mile (due to terrain and positioning complications).  However the locations of the mileposts very rarely change and thus are still useful in position forecasting. 
+          example: 58.81
         milepostPrefix:
           type: string
           description: 'The prefix of the nearest milepost for this Location'
@@ -266,28 +214,6 @@ components:
       properties:
         subdivisionId:
           $ref: '#/components/schemas/SubdivisionIdType'
-        trackDataVersion:
-          description: 'The version of the track data for the subdivsion/location data'
-          type: number
-          example: 20
-        pollRate:
-          description: 'Rate at which Poll registration requested'
-          type: number
-          example: 10
-        lastRegistrationRequestTime:
-          description: 'The date and time (in UTC) Poll Registration was requested.'
-          type: string
-          format: date-time
-          example: '2020-09-15T18:38:52.000Z'
-        confirmationReasonCode:
-          description: 'Confirmation reason code on Poll registration'
-          type: number
-          example: 1
-        registrationConfirmationTime:
-          description: 'The date and time (in UTC) Poll Registration request confirmed.'
-          type: string
-          format: date-time
-          example: '2020-09-15T18:38:52.000Z'
       required:
         - subdivisionId
     
@@ -300,35 +226,6 @@ components:
       description: 'The Augmented Operating Train Updated version data via 6657 EMP message'
       type: object
       properties:
-        stateCode:
-          description: >-
-            The train state code that indicates one of the value as defined below.
-              * 0 - Unknown
-              * 1 - Active
-              * 2 - Completed
-              * 3 - Inactive
-              * 4 - Planned
-              * 5 - Tentative
-          type: integer
-          example: 1
-        statusCode:
-          description: >-
-            The train status code that indicates one of the value as defined below.
-              * 0 - Unknown
-              * 1 - AbnormTerm
-              * 2 - Committed
-              * 3 - Declined
-              * 4 - Held
-              * 5 - Purged
-              * 6 - Ready
-              * 7 - Requested
-              * 8 - Running
-              * 9 - Scheduled
-              * 10 - Terminated
-              * 11 - TotallyAnnulled
-              * 12 - Working
-          type: integer
-          example: 8
         priorityCode:
           description: >-
             The train priority code that indicates one of the value as defined below.
@@ -365,83 +262,6 @@ components:
               * 20 - Yard
           type: integer
           example: 12
-        subCategoryCode:
-          description: >-
-            The train subcategory code that indicates one of the value as defined below.
-              * 0 - Unknown
-              * 1 - ADM
-              * 2 - AGPD
-              * 3 - APL
-              * 4 - APL Focus Train
-              * 5 - Auto Parts
-              * 6 - Auto/Auto Parts
-              * 7 - Auto Repo
-              * 8 - CBGR
-              * 9 - CDTX
-              * 10 - CKRY
-              * 11 - Chemicals
-              * 12 - MOW Schedule (CMTL)
-              * 13 - COAL
-              * 14 - CSP
-              * 15 - CVRY
-              * 16 - Loco Cycle 1
-              * 17 - Loco Cycle 2
-              * 18 - Loco Cycle 3
-              * 19 - Loco Cycle 4
-              * 20 - DART
-              * 21 - Detour Schedule
-              * 22 - DPU Operation
-              * 23 - DSSR
-              * 24 - Unit Ethanol (ETHN)
-              * 25 - Evergreen (EVG)
-              * 26 - Food Products (FOOD)
-              * 27 - Bulk Grain Schedule (GRAN)
-              * 28 - GWER
-              * 29 - GWWR
-              * 30 - Hauler Power (HAUL)
-              * 31 - Hanjin Shipping (HNJ)
-              * 32 - Hostler (HSLR)
-              * 33 - Intermodal Schedule (IMDL)
-              * 34 - Industrial Products (INDP)
-              * 35 - JPBX
-              * 36 - Key Interchange (KEY)
-              * 37 - K Line (KLN)
-              * 38 - KLNF
-              * 39 - METX
-              * 40 - MISC
-              * 41 - Metals/Minerals (MM)
-              * 42 - MTRA
-              * 43 - Military Schedule (MTRY)
-              * 44 - NEKM
-              * 45 - NOPB
-              * 46 - NorthWest Container (NWC)
-              * 47 - OIL
-              * 48 - ORE
-              * 49 - Placeholder (PHLD)
-              * 50 - PIPE
-              * 51 - Premium Service (PREM)
-              * 52 - Priority Service (PRI)
-              * 53 - Perishables (PRSH)
-              * 54 - PTC
-              * 55 - RCL
-              * 56 - Reposition Train (REPO)
-              * 57 - ROCK
-              * 58 - Roustabout (RSBT)
-              * 59 - Heritage Fleet (S150)
-              * 60 - SCAX
-              * 61 - Shuttle Train (SHUT)
-              * 62 - San Joaquin (SJRX)
-              * 63 - SNOW
-              * 64 - SODA
-              * 65 - Standard Service (STND)
-              * 66 - Triple Crown (TPC)
-              * 67 - TRE
-              * 68 - UPS
-              * 69 - Utah Transit Authority (UTA)
-              * 70 - Utility Job (UTIL)
-              * 71 - WIND
-          type: integer
-          example: 68
         authorityRangeCode:
           description: >- 
             The train authority range that indicates one of the value as defined below.
@@ -484,11 +304,6 @@ components:
           type: number
           format: float
           example: 2624.0
-        windBlowOverSpeed:
-          description: 'The wind blow speed that cause not to run a train in MPH.'
-          type: number
-          format: float
-          example: 71.0
         actualTonsPerAxle:
           description: 'The total trailing tons of cars and dead locomotives in short tons.'
           type: number
@@ -528,127 +343,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AOTURouteLocation'
-        consistLocationListByTypeList:
-          description: >-
-            The head, mid, and rear consist locomotive equipment key lists that are grouped by location ID and consist type code.
-          type: array
-          items:
-            $ref: '#/components/schemas/AOTUConsistLocationListByType'
-        routeLimitAndRecommendationListByTypeList:
-          description: 'The route limit and recommendation list grouped by consist plan type code'
-          type: array
-          items: 
-            $ref: '#/components/schemas/AOTURouteLimitAndRecommendationListByConsistPlanType'
-        consistLocomotiveList:
-          description: 'The list of consist locomotives'
-          type: array
-          items:
-            $ref: '#/components/schemas/AOTULocomotive'
 
     AOTURouteLocation:
       description: 'The AOTU Route Location'
       type: object
       properties:
         locationId:
-          $ref: '#/components/schemas/AOTULocationIdType'
+          type: integer
+          format: int32
         routeSequence:
           description: 'The sequence number of the route location.'
           type: integer
           example: 1
-        systemStationId:
-          $ref: '#/components/schemas/AOTUSystemStationIdType'
+        subdivisionId:
+          $ref: '#/components/schemas/SubdivisionIdType'
+        milepost:
+          $ref: '#/components/schemas/MilepostType'
         stationType:
           description: >-
             Indicate Origin (O), Intermediate (I), Destination (D), or Range (R).
           type: string
           example: D
-        inboundDirectionCode:
-          description: >-
-            The direction of travel when arriving the station. The code value as defined below.
-              * 0 - Unknown
-              * 1 - North
-              * 2 - South
-              * 3 - East
-              * 4 - West
-          type: integer
-          example: 1
-        outboundDirectionCode:
-          description: >-
-            The direction of travel when departing the station. The code value as defined below.
-              * 0 - Unknown
-              * 1 - North
-              * 2 - South
-              * 3 - East
-              * 4 - West
-          type: integer
-          example: 1
         isEventLocation:
           description: 'This value is true when it is an event location, otherwise false.'
           type: boolean
           example: false
-        timeboxList:
-          description: 'The timebox list extracted from type with committed part.'
-          type: array
-          items:
-            $ref: '#/components/schemas/AOTUTimebox'
         activityList:
           description: 'The train activity list.'
           type: array
           items:
             $ref: '#/components/schemas/AOTUActivity'
-    
-    AOTULocationIdType:
-        description: >-
-          The AOTU Location ID type. This is a unique number that refers to this specific route location. No other train's route will reuse this number. This doesn't change until it is being completely removed from the route.
-        type: integer
-        format: int32
-        example: 123456
-        
-    AOTUSystemStationIdType:
-        description: >-
-          The System Station ID (SSID) of AOTU location.
-        type: integer
-        format: int32
-        example: 1234
-    
-    AOTUTimebox:
-      description: 'The AOTU Timebox details.'
-      type: object
-      properties:
-        typeCode:
-          description: >-
-            This indicates one of the value as defined below
-              * 0 - Unknown
-              * 1 - Actual arrival time
-              * 2 - Committed arrival time
-              * 3 - Working arrival time
-              * 4 - Planned arrival time
-              * 5 - Synthesized actual arrival time
-              * 6 - Actual departure time
-              * 7 - Committed departure time
-              * 8 - Working departure time
-              * 9 - Planned departure time
-              * 10 - Synthesized actual departure time
-              * 11 - Working activity time
-              * 12 - Planned activity time
-              * 13 - Committed activity time
-              * 14 - Synthesized actual activity time
-          type: integer
-          example: 2
-        time:
-          description: 'The timebox date time in UTC.'
-          type: string
-          format: date-time
-          example: '2020-11-25T18:38:58.477Z'
-        offsetDuration:
-          description: 'The timebox type offset duration. For location timebox type, this value is always 0.'
-          type: integer
-          format: int64
-          example: 25
-        isRequired:
-          description: 'The value indicates either true or false. For location timebox type, this value is always false.'
-          type: boolean
-          example: true
           
     AOTUActivity:
       description: 'The train AOTU Activity details.'
@@ -680,28 +404,6 @@ components:
             The activity qualifier for the group code of FUEL, INSPECTION, etc. For an instance, the group code of FUEL, the values are F (Full), K (Check), P (Partial).
           type: string
           example: 'F'
-        anchorEventCode:
-          description: >-
-            The code that assigned to an anchor event having an offset duration for Arrival, Departure. It defined as below.
-              * 0 - Unknown
-              * 1 - Arrival
-              * 2 - Train Arrival Cancelled
-              * 3 - Train Departure Cancelled
-              * 4 - Train Passing Cancelled
-              * 5 - Train Arrival Correction
-              * 6 - Train Departure Correction
-              * 7 - Train Passing Correction
-              * 8 - Crew Called
-              * 9 - Departure
-              * 10 - Onsite Reporting
-              * 11 - Crew Order
-              * 12 - Crew Order Cancel
-              * 13 - OS Reporting
-              * 14 - Passing
-              * 15 - Extended OS Inbound
-              * 16 - Extended OS Outbound
-          type: integer
-          example: 1
         statusCode:
           description: >-
             The activity status code as defined below.
@@ -712,223 +414,62 @@ components:
               * 4 - Verified
           type: integer
           example: 1
-        timeboxList:
-          description: 'The timebox list for types suchas Planned, Committed, Working, etc.'
-          type: array
-          items:
-            $ref: '#/components/schemas/AOTUTimebox'
-          
-    AOTURouteLimitAndRecommendationListByConsistPlanType:
-      description: 'The List of RouteLimitAndRecommendation by Consist Plan Type Code'
+    
+    MilepostSegmentStateType:
+      description: 'The State of a subdivision milepost segment, a portion of main track between two mileposts'
       type: object
       properties:
-        consistPlanTypeCode:
-          description: >- 
-            The consist plan type code for Planned, Reported, etc as defined below.
-              * 0 - Unknown
-              * 1 - Planned
-              * 2 - PlannedSetoutsOnly
-              * 3 - Reported
-          type: integer
-          example: 1
-
-    AOTULocomotive:
-      description: 'The AOTU Consist Locomotive'
-      type: object
-      properties:
-        equipmentKey:
-          $ref: '#/components/schemas/AOTUEquipmentKeyType'
-        equipmentInitial:
-          description: 'The locomotive equipment initial'
+        trackName:
           type: string
-          example: 'UP'
-        equipmentNumber:
-          description: 'The locomotive equipment number'
-          type: integer
-          example: 1234
-        equipmentStatusCode:
-          description: >-
-            The status code of the locomotive in the consist as defined below.
-              * 0 - Unknown
-              * 1 - Advanced Future Pickup
-              * 2 - Advanced on Train
-              * 3 - Anticipated
-              * 4 - Future Pickup
-              * 5 - On Train
-              * 6 - Setout
-          type: integer
-          example: 1
-        grossWeight:
-          description: 'The locomotive gross weight in pounds.'
-          type: number
-          format: float
-          example: 8878400.0
-        workorderFailureCode:
-          description: >-
-            Identifies if there is a workorder failure on this piece of equipment.
-              * 0 - Unknown
-              * 1 - True
-              * 2 - False
-          type: integer
-          example: 1
-        locomotiveAttributesByConsistTypeList:
-          description: 'The list of locomotive attributes by consist type code.'
+        milepost:
+         $ref: '#/components/schemas/MilepostType'
+        switchList:
+          description: 'A list of every switch in this milepost segment and its last reported state'
           type: array
           items:
-            $ref: '#/components/schemas/AOTULocomotiveAttributesByConsistType'
-        actualRecommendations:
-          $ref: '#/components/schemas/AOTUEpaEdba'
-        pickupStationId:
-          $ref: '#/components/schemas/AOTUSystemStationIdType'
-        setoutStationId:
-          $ref: '#/components/schemas/AOTUSystemStationIdType'
-          
-    AOTULocomotiveAttributesByConsistType:
-      description: 'The AOTU locomotive attributes by consist type.'
-      type: object
-      properties:
-        consistTypeCode:
-          $ref: '#/components/schemas/AOTUConsistTypeCodeType'
-        locomotiveAttributes:
-          $ref: '#/components/schemas/AOTULocomotiveAttributes'
-          
-    AOTULocomotiveAttributes:
-      description: 'The AOTU locomotive consist type attributes.'
-      type: object
-      properties:
-        sequenceFromFront:
-          description: >-
-            The ordinal value of the locomotive's position in the consist.
-          type: integer
-          example: 1
-        facingDirectionCode:
-          description: >-
-            Identifies the direction of the locomotive (Forward, Backward)
-              * 0 - Unknown
-              * 1 - Backward (B)
-              * 2 - Forward (F)
-              * 3 - Not Applicable (NA)
-              * 4 - Unknown (U)
-          type: integer
-          example: 1
-        mechanicalStatusCode:
-          description: >-
-            The mechanical status of the locomotive (Working, NotWorking)
-              * 0 - Unknown
-              * 1 - Not Working
-              * 2 - Working
-          type: integer
-          example: 1
-        equivalentPoweredAxles:
-          description: 'The full EPA or reduced CTE value.'
-          type: integer
-          example: 48
-        epaAdjustedReasonCode:
-          description: >-
-            Identifies the reason if a locomotive EPA is adjusted. This is an optional value.
-          type: integer
-          example: 1
-        controllingIndicatorCode:
-          description: >-
-            Identifies if the locomotive is controlling power unit.
-              * 0 - Unknown
-              * 1 - True
-              * 2 - False
-          type: integer
-          example: 1
-          
-    AOTUEpaEdba:
-      description: 'The AOTU EPA and EDBA details.'
-      type: object
-      properties:
-        equivalentPoweredAxles:
-          description: 'The locomotive equivalent powered axles (EPA).'
-          type: integer
-          example: 48
-        equivalentDynamicBrakingAxles:
-          description: 'The locomotive equivalent dynamic braking axles (EDBA).'
-          type: integer
-          example: 48
+            $ref: '#/components/schemas/SwitchStateType'
+        signalList:
+          description: 'A list of every signal in this milepost segment and its last reported state'
+          type: array
+          items:
+            $ref: '#/components/schemas/SignalStateType'
+        trainList:
+          description: 'A list of every train in this milepost segment and its last reported state'
+          type: array
+          items:
+            $ref: '#/components/schemas/TrainStateType'
     
-    AOTUConsistGroupPositionType:
-        description: 'The locomotive consist group position number.'
-        type: integer
-        example: 1
-          
-    AOTUEquipmentKeyType:
-      description: >-
-        The AOTU locomotive consist equipment key type. A unique number that refers to specific piece of equipment in the consist.
-      type: integer
-      format: int32
-      example: 1
+    SwitchStateType:
+      description: 'The State of a Track Switch'
+      type: object
+      properties:
+        milepostLocation:
+          $ref: '#/components/schemas/MilepostType'
+        switchState:
+          type: integer
+          description: >-
+            The switch State indicates *both* the switch direction state
+            0 == UNKNOWN/Switching (the state is changing or not known)
+            1 == facing milepost increasing and set to remain on this train
+            -1 == facing milepost decreasing and set to remain on this train
+            2 == facing milepost increasing, but switched to leave this track (trains moving milepost increasing will leave this track)
+            -2 == facing milepost decreasing, and switched to leave this track (trains moving milepost decreasing will leave this track)
     
-    AOTUConsistLocationListByType:
-      description: 'The consists location list by consist type code'
+    SignalStateType:
+      description: 'The State of a Track Signal'
       type: object
       properties:
-        consistTypeCode:
-          $ref: '#/components/schemas/AOTUConsistTypeCodeType'
-        consistLocationList:
-          description: 'The head, mid, rear and unknown consist lists present at each location.'
-          type: array
-          items:
-            $ref: '#/components/schemas/AOTUConsistLocation'
-            
-    AOTUConsistLocation:
-      description: 'The locomotive group consists present in the location ID.'
-      type: object
-      properties:
-        systemStationId:
-          $ref: '#/components/schemas/AOTUSystemStationIdType'
-        headConsistEquipmentKeyList:
-          description: 'The group of locomotive consist equipment key list present in Head position.'
-          type: array
-          items:
-            $ref: '#/components/schemas/AOTUEquipmentKeyType'
-        midConsistEquipmentKeyListByGroupPositionList:
-          description: 'The group of locomotive consist equipment key list present at Mid level by position number list.'
-          type: array
-          items:
-            $ref: '#/components/schemas/AOTUMidConsistListByGroupPosition'
-        rearConsistEquipmentKeyList:
-          description: 'The group of locomotive consist equipment key list present in Rear position.'
-          type: array
-          items:
-            $ref: '#/components/schemas/AOTUEquipmentKeyType'
-        unknownConsistEquipmentKeyList:
-          description: 'The group of locomotive consist equipment key list present at the Unknown position'
-          type: array
-          items:
-            $ref: '#/components/schemas/AOTUEquipmentKeyType'
-            
-    AOTUConsistTypeCodeType:
-      description: >-
-            The Type of consist as reported by NetControl (Historical, Current, Planned, LocoPlan). Pulse captures Current, LocoPlan only.
-              * 0 - Unknown
-              * 1 - Advanced
-              * 2 - Current
-              * 3 - Historical
-              * 4 - LocoPlan
-      type: integer
-      example: 2
-    
-    AOTUMidConsistListByGroupPosition:
-      description: 'The Mid locomotive consist list by group position number.'
-      type: object
-      properties:
-        groupPosition:
-          $ref: '#/components/schemas/AOTUConsistGroupPositionType'
-        midConsistEquipmentKeyList:
-          description: 'The group of locomotive consist equipment key list contained in Mid position.'
-          type: array
-          items:
-            $ref: '#/components/schemas/AOTUEquipmentKeyType'
-    
-    AOTUSystemStationToLocationIdIndex:
-      description: 'The mapping between systemStationId and routeLocationId.'
-      type: object
-      properties:
-        systemStationId:
-          $ref: '#/components/schemas/AOTUSystemStationIdType'
-        locationId:
-          $ref: '#/components/schemas/AOTULocationIdType'
+        milepostLocation:
+          $ref: '#/components/schemas/MilepostType'
+        signalState:
+          type: integer
+          description: >-
+            signal state indicates *both* the signal indication and direction
+            0 = dark
+            1 = RED     (STOP)for trains moving MP increasing (e.g. the signal is facing train moving in the MP increasing direction, so trains moving MP increasing must STOP (technically it is facing MP decreasing)
+            2 = YELLOW  (APPROACH) for trains moving MP increasing
+            3 = FLASHING_YELLOW (ADVANCE-APPROACH) for trains moving MP increasing
+            4 = GREEN   (CLEAR) for trains moving MP increasing
+            -1 = RED    (STOP)for trains moving MP decreasing (e.g. the signal is facing trains moving in the MP decreasing direction (technically it is facing MP increasing)
+            -2 = YELLOW (APPROACH) for trains moving MP decreasing
+            -3 = FLASHING_YELLOW (ADVANCE-APPROACH) for trains moving MP decreasing
