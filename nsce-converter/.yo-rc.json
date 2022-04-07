@@ -1,0 +1,7 @@
+{
+  "generator-diesel-templates": {
+    "serviceName": "sample-domain/utterance-shouted/1.0",
+    "tla": "pac",
+    "artifactId": "nsce-converter"
+  }
+}

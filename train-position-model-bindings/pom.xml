@@ -132,7 +132,7 @@
 							<!-- <language>java</language> -->
 							<configOptions>
 								<sourceFolder>src/java/main</sourceFolder>
-								<additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor @lombok.AllArgsConstructor @lombok.experimental.Accessors(fluent \u003D true)</additionalModelTypeAnnotations>
 								<output>${project.build.directory}/generated-sources</output>
 							</configOptions>
 						</configuration>

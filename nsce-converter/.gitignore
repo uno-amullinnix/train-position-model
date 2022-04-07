@@ -1,0 +1,22 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+*.iml
+.idea/
+
+# Maven
+/target/
+release.properties
+*.releaseBackup
+
+# Svn
+.svn/
+
+# Other
+log/
+*.log
+bin/
+logs/
