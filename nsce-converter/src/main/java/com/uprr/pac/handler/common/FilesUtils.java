@@ -7,25 +7,28 @@ import java.text.MessageFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.*;
+
+import javax.xml.bind.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.model.PTCSubdivisionData;
-import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.*;
 import com.uprr.psm.core.cache.vo.TrainCacheObjects;
-import com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.SubdivisionStateData;
 import com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.*;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Slf4j 
 public class FilesUtils {
     private static final DateTimeFormatter FILEDATE_PATTERN = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
-
+    
     public static List<File> getFilesInDirectory(String directoryName) throws IOException {
         List<File> fileNames = Files.walk(Paths.get(directoryName))
                 .filter(Files::isRegularFile)
@@ -35,11 +38,24 @@ public class FilesUtils {
     }
     
     public static TrainCacheObjects loadNetworkStateEvent(File fileName) throws IOException, JsonParseException, JsonMappingException {
-        TrainCacheObjects[] response = createObjectMapper().readValue(fileName, TrainCacheObjects[].class);
+        TrainCacheObjects[] response;
+        if (fileName.getName().endsWith(".gz")) {
+            response = unzipAndLoadFile(fileName);
+        } else {
+            response = createObjectMapper().readValue(fileName, TrainCacheObjects[].class);
+        }
         assert (response.length == 1);
         return response[0];
     }
-
+    
+    private static TrainCacheObjects[] unzipAndLoadFile(File zipFilePath) throws StreamReadException, DatabindException, IOException {
+        
+        GZIPInputStream zipIn = new GZIPInputStream(new FileInputStream(zipFilePath));
+        TrainCacheObjects[] response = createObjectMapper().readValue(zipIn, TrainCacheObjects[].class);
+        zipIn.close();
+        return response;
+    }
+    
     private static ObjectMapper createObjectMapper() {
         return JsonMapper.builder()
                 .addModule(new JavaTimeModule())
@@ -112,4 +128,17 @@ public class FilesUtils {
         return StringUtils.isBlank(s) ? "" : s.trim();
     }
     
+    public static List<SystemStationType> loadSystemStations(String xmlFileName) {
+        log.info("loading SystemStations: "+xmlFileName);
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(FindSystemStationReply.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            FindSystemStationReply reply = (FindSystemStationReply) jaxbUnmarshaller.unmarshal(getFileStream(xmlFileName));
+            return reply.getSystemStationList().getSystemStation();
+        } catch (JAXBException e) {
+            log.error("problem reading/parsing file",e);
+            throw new IllegalArgumentException("Unable to read XML File: "+xmlFileName, e);
+        }
+        
+    }
 }

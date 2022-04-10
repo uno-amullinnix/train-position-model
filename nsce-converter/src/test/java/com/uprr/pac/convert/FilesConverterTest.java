@@ -19,12 +19,16 @@ class FilesConverterTest {
     
     @Test
     void testConvertPulseModel() throws IOException {
-        FilesConverter converter = new FilesConverter(FilesUtils.loadDevices("/boone-devices.json"));
+        FilesConverter converter = new FilesConverter(FilesUtils.loadDevices("/boone-devices.json"),FilesUtils.loadSystemStations("/boone-stations.xml"));
         List<File> files = FilesUtils.getFilesInDirectory("network-events");
         assertThat(files).isNotEmpty();
-        TrainCacheObjects trainCache = FilesUtils.loadNetworkStateEvent(files.get(0));
-        PTCSubdivisionData converted = converter.convertPulseModel(trainCache);
-        System.out.println(converted);
+        for (File file : files) {
+            TrainCacheObjects trainCache = FilesUtils.loadNetworkStateEvent(file);
+            PTCSubdivisionData converted = converter.convertPulseModel(trainCache);
+            System.out.println(converted.getLastTrainReporting().getTrainId());
+            FilesUtils.writeTrainFile("test-train-events", converted);
+        }
     }
+   
     
 }

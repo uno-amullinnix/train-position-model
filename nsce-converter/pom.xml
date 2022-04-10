@@ -73,6 +73,29 @@
 			<artifactId>positive-train-control-subdivision-state-find-track-network-device-state-json-bindings</artifactId>
 			<version>1.0.1</version>
 		</dependency>
+		<!-- location/find-system-station/2.2 Service client -->
+		<dependency>
+			<groupId>com.uprr.pac.clients</groupId>
+			<artifactId>ptc-pacing-find-system-station-client-1_0</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.activation/activation -->
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>

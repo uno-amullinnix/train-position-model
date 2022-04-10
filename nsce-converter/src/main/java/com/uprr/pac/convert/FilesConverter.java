@@ -2,6 +2,7 @@ package com.uprr.pac.convert;
 
 import java.time.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -16,6 +17,8 @@ import org.openapitools.model.MilepostType;
 import org.openapitools.model.SubdivisionData;
 
 import com.uprr.enterprise.datetime.UTCTimestamp;
+import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.SystemStationType;
+import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.FindSystemStationRequest.SearchCriteria.SystemStationIdList;
 import com.uprr.psm.core.cache.vo.TrainCacheObjects;
 import com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.*;
 import com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.DeviceData;
@@ -23,16 +26,22 @@ import com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.Fi
 
 public class FilesConverter {
     private static final String DIRECTION_MP_DECREASING = "2";
-    private Map<Integer, DeviceData> subdivisionDevices;
+    private Map<String, DeviceData> subdivisionDevicesMap;
+    private Map<Integer, SystemStationType> systemStationsMap;
     private String subdivisionName;
     private Integer subdivisionId;
     
-    public FilesConverter(FindTrackNetworkDeviceStateResponse subdivDevices) {
+    public FilesConverter(FindTrackNetworkDeviceStateResponse subdivDevices, List<SystemStationType> subdivisionStations) {
         this.subdivisionName = subdivDevices.getSubdivisionName();
         this.subdivisionId = Integer.valueOf(subdivDevices.getDeviceList().get(0).getSubdivisionId());
-        subdivDevices.getDeviceList().stream()
-            .filter(d -> StringUtils.isNotBlank(d.getDataSourceId()))
-            .map( d -> subdivisionDevices.put(Integer.getInteger(d.getDataSourceId()), d));
+        subdivisionDevicesMap = subdivDevices.getDeviceList().stream()
+                .filter(d -> StringUtils.isNotBlank(d.getDataSourceId()))
+                .collect(Collectors.toMap(DeviceData::getDataSourceId, Function.identity(),
+                        (existing, replacement) -> existing));
+        systemStationsMap = subdivisionStations.stream()
+                .collect(Collectors.toMap(SystemStationType::getSystemStationId, Function.identity(),
+                        (existing, replacement) -> existing));
+        System.out.println("Started");
     }
     
     public PTCSubdivisionData convertPulseModel(TrainCacheObjects trainCache) {
@@ -95,37 +104,36 @@ public class FilesConverter {
         return positionHistoryList.stream()
                 .map(p -> new TrainPositionReport()
                         .milepostLocation(createMilepostLocationType(p.getHeadEndLocation()))
-                        .positionTime(convertUTCTimestamp(p.getPositionTime()))
-                        .speedMPH(computeSpeed(p.getSpeed(), p.getDirectionOfTravel()))
-                        )
+                        .positionTime(convertUTCTimestamp(p.getAuditData().getEventCreatedDateTime()))
+                        .speedMPH(computeSpeed(p.getSpeed(), p.getDirectionOfTravel())))
                 .collect(Collectors.toList());
     }
     
     private Integer computeSpeed(Integer speed, String directionOfTravel) {
-        return DIRECTION_MP_DECREASING.equals(directionOfTravel.trim())? speed * -1:speed;
+        return DIRECTION_MP_DECREASING.equals(directionOfTravel.trim()) ? speed * -1 : speed;
     }
-
+    
     private OffsetDateTime convertUTCTimestamp(UTCTimestamp positionTime) {
         if (positionTime == null) {
             return null;
         }
         return OffsetDateTime.ofInstant(Instant.ofEpochMilli(positionTime.getTimeInMillis()), ZoneOffset.UTC);
     }
-
+    
     private MilepostLocationType createMilepostLocationType(@Valid PTCLocationData headEndLocation) {
         return new MilepostLocationType()
                 .subdivisionId(headEndLocation.getSubdivisionId())
                 .trackName(headEndLocation.getTrackName())
                 .milepost(createMilepostType(headEndLocation.getLocationMilepost()));
     }
-
+    
     private MilepostType createMilepostType(com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.@Valid MilepostType locationMilepost) {
         return new MilepostType()
                 .milepostNumber(locationMilepost.getMilepost().floatValue())
                 .milepostPrefix(locationMilepost.getMilepostPrefix())
                 .milepostSuffix(locationMilepost.getMilepostSuffix());
     }
-
+    
     private List<LocomotiveStatusReport> createLocomotiveList(PTCTrainData trainData) {
         List<com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.LocomotiveStatusReport> locoList = trainData.getLocomotiveList();
         return locoList.stream()
@@ -135,15 +143,14 @@ public class FilesConverter {
                         .locomotiveLength(l.getLocomotiveLength())
                         .locomotiveRunStatus(Integer.getInteger(l.getLocomotiveRunStatus()))
                         .locomotiveWeight(l.getLocomotiveWeight())
-                        .positionOnTrain(l.getPositionOnTrain())
-                        )
+                        .positionOnTrain(l.getPositionOnTrain()))
                 .collect(Collectors.toList());
     }
     
     private TrainPositionReport createLastPosition(LocomotivePositionReport lastReportedPosition) {
         return new TrainPositionReport()
                 .milepostLocation(createMilepostLocationType(lastReportedPosition.getHeadEndLocation()))
-                .positionTime(convertUTCTimestamp(lastReportedPosition.getPositionTime()))
+                .positionTime(convertUTCTimestamp(lastReportedPosition.getAuditData().getEventCreatedDateTime()))
                 .speedMPH(computeSpeed(lastReportedPosition.getSpeed(), lastReportedPosition.getDirectionOfTravel()));
     }
     
@@ -169,19 +176,21 @@ public class FilesConverter {
     
     private List<AOTURouteLocation> createLocationList(
             @Valid List<com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.AOTURouteLocation> routeLocationList) {
-        return routeLocationList.stream()
+        List<AOTURouteLocation> routeLocations = routeLocationList.stream()
                 .map(l -> new AOTURouteLocation()
                         .activityList(createActivities(l.getActivityList()))
                         .isEventLocation(l.getIsEventLocation())
                         .locationId(l.getLocationId())
+                        .subdivisionId(this.subdivisionId)  //we will eliminate any others
                         .milepost(lookupMilepost(l.getSystemStationId()))
                         .routeSequence(l.getRouteSequence())
-                        .stationType(l.getStationType())
-                        )
+                        .stationType(l.getStationType()))
                 .collect(Collectors.toList());
+        return routeLocations.stream()
+            .filter(r -> r.getMilepost() != null)
+            .collect(Collectors.toList());
     }
-
-
+    
     private List<AOTUActivity> createActivities(List<com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.AOTUActivity> activityList) {
         return activityList.stream()
                 .map(a -> new AOTUActivity()
@@ -190,7 +199,7 @@ public class FilesConverter {
                         .statusCode(a.getStatusCode()))
                 .collect(Collectors.toList());
     }
-
+    
     private PTCTrainData findLeadLocomotiveTrainData(List<PTCTrainData> locoList, String locoId) {
         return locoList.stream()
                 .filter(trainData -> locoId.equalsIgnoreCase(trainData.getPtcLocomotiveId().trim()))
@@ -204,8 +213,17 @@ public class FilesConverter {
     }
     
     private MilepostType lookupMilepost(Integer systemStationId) {
-        // TODO Auto-generated method stub
-        return new MilepostType().milepostNumber(999.99f);
+        if (systemStationId == null) {
+            return null;
+        }
+        if (systemStationId.equals(1282)) {
+          System.out.println("BOONE");  
+        }
+        SystemStationType station = systemStationsMap.get(systemStationId);
+        if (station == null) {
+            return null;
+        }
+        return new MilepostType().milepostNumber(station.getMilepost().floatValue());
     }
     
     private List<TrainPositionReport> createTrainEstimatedPositionList(PTCTrainData trainData) {

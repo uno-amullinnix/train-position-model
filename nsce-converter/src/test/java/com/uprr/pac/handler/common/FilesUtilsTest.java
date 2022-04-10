@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.openapitools.model.*;
 import org.openapitools.model.MilepostType;
 
+import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.SystemStationType;
 import com.uprr.psm.core.cache.vo.*;
 import com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.SubdivisionStateData;
 import com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.*;
@@ -33,7 +34,15 @@ class FilesUtilsTest {
         Collection<SubdivisionStateData> events = trainCache.getData();
         assertThat(events).isNotEmpty();
     }
-    
+    @Test
+    void loadNetworkStateEventTestZip() throws Exception {
+        File f = new File("network-events/UP8105-1648749499000-{2}.json.gz");
+        TrainCacheObjects trainCache = FilesUtils.loadNetworkStateEvent(f);
+        assertThat(trainCache.getMetadata().getTrainId()).isEqualTo("UPCWKBT926");
+        CacheMetadata trainData = trainCache.getMetadata();
+        Collection<SubdivisionStateData> events = trainCache.getData();
+        assertThat(events).isNotEmpty();
+    }
     @Test
     void testWriteTrainFile() throws Exception {
         PTCSubdivisionData outputEvent = new PTCSubdivisionData()
@@ -70,7 +79,14 @@ class FilesUtilsTest {
         List<File> files = FilesUtils.getFilesInDirectory("network-events");
         assertThat(files).isNotEmpty();
         assertThat(files).anyMatch(f -> f.getName().equals("UP8105-1648749499000-{2}.json"));
+        assertThat(files).anyMatch(f -> f.getName().equals("UP3015-1648747759000-{2}.json.gz"));
         
+    }
+    
+    @Test
+    void loadSystemStations() throws Exception {
+        List<SystemStationType> stationsList = FilesUtils.loadSystemStations("/boone-stations.xml");
+        assertThat(stationsList).isNotEmpty();
     }
     
 }
