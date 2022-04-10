@@ -15,7 +15,7 @@
     "trainLength" : 3216,
     "trailingTonnage" : 2503,
     "lastReportedPosition" : {
-      "positionTime" : 1648745481.000000000,
+      "positionTime" : "2022-03-31T16:51:21Z",
       "speedMPH" : -25,
       "milepostLocation" : {
         "subdivisionId" : 106,
@@ -29,7 +29,7 @@
       "reversing" : null
     },
     "positionHistoryList" : [ {
-      "positionTime" : 1648745481.000000000,
+      "positionTime" : "2022-03-31T16:51:21Z",
       "speedMPH" : -25,
       "milepostLocation" : {
         "subdivisionId" : 106,
@@ -42,7 +42,7 @@
       },
       "reversing" : null
     }, {
-      "positionTime" : 1648745426.000000000,
+      "positionTime" : "2022-03-31T16:50:26Z",
       "speedMPH" : -31,
       "milepostLocation" : {
         "subdivisionId" : 106,
@@ -55,7 +55,7 @@
       },
       "reversing" : null
     }, {
-      "positionTime" : 1648745276.000000000,
+      "positionTime" : "2022-03-31T16:47:56Z",
       "speedMPH" : -55,
       "milepostLocation" : {
         "subdivisionId" : 106,
@@ -68,7 +68,7 @@
       },
       "reversing" : null
     }, {
-      "positionTime" : 1648745226.000000000,
+      "positionTime" : "2022-03-31T16:47:06Z",
       "speedMPH" : -62,
       "milepostLocation" : {
         "subdivisionId" : 106,
@@ -81,7 +81,7 @@
       },
       "reversing" : null
     }, {
-      "positionTime" : 1648745192.000000000,
+      "positionTime" : "2022-03-31T16:46:32Z",
       "speedMPH" : -65,
       "milepostLocation" : {
         "subdivisionId" : 106,

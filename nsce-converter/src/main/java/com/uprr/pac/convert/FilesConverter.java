@@ -1,6 +1,7 @@
 package com.uprr.pac.convert;
 
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -105,7 +106,7 @@ public class FilesConverter {
                 .map(p -> new TrainPositionReport()
                         .milepostLocation(createMilepostLocationType(p.getHeadEndLocation()))
                         .positionTime(convertUTCTimestamp(p.getAuditData().getEventCreatedDateTime()))
-                        .speedMPH(computeSpeed(p.getSpeed(), p.getDirectionOfTravel())))
+                        .speedMPH(computeSpeed(p.getSpeed(), p.getDirectionOfTravel())))                        
                 .collect(Collectors.toList());
     }
     
@@ -176,7 +177,7 @@ public class FilesConverter {
     
     private List<AOTURouteLocation> createLocationList(
             @Valid List<com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.AOTURouteLocation> routeLocationList) {
-        List<AOTURouteLocation> routeLocations = routeLocationList.stream()
+        return routeLocationList.stream()
                 .map(l -> new AOTURouteLocation()
                         .activityList(createActivities(l.getActivityList()))
                         .isEventLocation(l.getIsEventLocation())
@@ -185,10 +186,8 @@ public class FilesConverter {
                         .milepost(lookupMilepost(l.getSystemStationId()))
                         .routeSequence(l.getRouteSequence())
                         .stationType(l.getStationType()))
+                .filter(location -> location.getMilepost() != null)
                 .collect(Collectors.toList());
-        return routeLocations.stream()
-            .filter(r -> r.getMilepost() != null)
-            .collect(Collectors.toList());
     }
     
     private List<AOTUActivity> createActivities(List<com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.AOTUActivity> activityList) {
@@ -207,10 +206,6 @@ public class FilesConverter {
                 .orElse(null);
     }
     
-    private List<MilepostSegmentStateType> createMilepostSegmentList(TrainCacheObjects trainCache) {
-        // TODO Auto-generated method stub
-        return null;
-    }
     
     private MilepostType lookupMilepost(Integer systemStationId) {
         if (systemStationId == null) {
@@ -227,6 +222,11 @@ public class FilesConverter {
     }
     
     private List<TrainPositionReport> createTrainEstimatedPositionList(PTCTrainData trainData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private List<MilepostSegmentStateType> createMilepostSegmentList(TrainCacheObjects trainCache) {
         // TODO Auto-generated method stub
         return null;
     }

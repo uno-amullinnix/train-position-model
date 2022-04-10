@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.*;
 import com.uprr.psm.core.cache.vo.TrainCacheObjects;
@@ -57,9 +58,13 @@ public class FilesUtils {
     }
     
     private static ObjectMapper createObjectMapper() {
-        return JsonMapper.builder()
+        JsonMapper mapper = JsonMapper.builder()
                 .addModule(new JavaTimeModule())
                 .build();
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        // StdDateFormat is ISO8601 since jackson 2.9
+        mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
+        return mapper;
     }
     
     public static FindTrackNetworkDeviceStateResponse loadDevices(String fileName) throws IOException, JsonParseException, JsonMappingException {
