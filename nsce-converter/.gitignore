@@ -20,3 +20,4 @@ log/
 *.log
 bin/
 logs/
+network-events/
