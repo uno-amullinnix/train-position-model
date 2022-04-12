@@ -1,0 +1,1586 @@
+{
+  "subdivisionId": 106,
+  "subdivisionName": "Boone",
+  "source": {
+    "type": "PTC_TRACK_FILE",
+    "version": "v24",
+    "subdivisionFileNumber": "46"
+  },
+  "trackList": {
+    "mainlines": [
+      {
+        "trackName": "MT 1",
+        "trackSegments": [
+          {
+            "beginMilepost": 202.2,
+            "endMilepost": 211.06,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3578365",
+              "nodeTypeCode": "SUBDIVISION"
+            },
+            "endNode": {
+              "nodeId": "837340",
+              "nodeTypeCode": "MILEPOSTEQUATIONBREAK"
+            }
+          },
+          {
+            "beginMilepost": 214,
+            "endMilepost": 326.19,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "837340",
+              "nodeTypeCode": "MILEPOSTEQUATIONBREAK"
+            },
+            "endNode": {
+              "nodeId": "3789375",
+              "nodeTypeCode": "SUBDIVISION"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "MT 2",
+        "trackSegments": [
+          {
+            "beginMilepost": 202.2,
+            "endMilepost": 203,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3578355",
+              "nodeTypeCode": "SUBDIVISION"
+            },
+            "endNode": {
+              "nodeId": "357834",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 203.01,
+            "endMilepost": 211.06,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357834",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "837341",
+              "nodeTypeCode": "MILEPOSTEQUATIONBREAK"
+            }
+          },
+          {
+            "beginMilepost": 214,
+            "endMilepost": 326.19,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "837341",
+              "nodeTypeCode": "MILEPOSTEQUATIONBREAK"
+            },
+            "endNode": {
+              "nodeId": "4027105",
+              "nodeTypeCode": "SUBDIVISION"
+            }
+          }
+        ]
+      }
+    ],
+    "sidings": [
+      {
+        "trackName": "N SIDING",
+        "trackSegments": [
+          {
+            "beginMilepost": 202.2,
+            "endMilepost": 202.84,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "10853755",
+              "nodeTypeCode": "SUBDIVISION"
+            },
+            "endNode": {
+              "nodeId": "357836",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      }
+    ],
+    "crossovers": [
+      {
+        "trackName": "XO",
+        "trackSegments": [
+          {
+            "beginMilepost": 224.34,
+            "endMilepost": 224.44,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "402730",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "630873",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 225.12,
+            "endMilepost": 225.22,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357827",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "402728",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "EASTXO",
+        "trackSegments": [
+          {
+            "beginMilepost": 202.85,
+            "endMilepost": 202.95,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "654336",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "654337",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 216.51,
+            "endMilepost": 216.61,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "541612",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "541613",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 235.89,
+            "endMilepost": 236.01,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "646935",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "646936",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 247.99,
+            "endMilepost": 248.11,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "647015",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "647016",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 255.45,
+            "endMilepost": 255.57,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "554240",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "554241",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 265.28,
+            "endMilepost": 265.4,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "554236",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "554237",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 278.82,
+            "endMilepost": 278.94,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "623005",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "623006",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 290.74,
+            "endMilepost": 290.84,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357790",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357791",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 299.58,
+            "endMilepost": 299.68,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357798",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357799",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 308.03,
+            "endMilepost": 308.12,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357786",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357787",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 318.48,
+            "endMilepost": 318.58,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357778",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357779",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 325.95,
+            "endMilepost": 326.05,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "378937",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "402711",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "WESTXO",
+        "trackSegments": [
+          {
+            "beginMilepost": 203.01,
+            "endMilepost": 203.13,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357834",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357833",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 216.64,
+            "endMilepost": 216.74,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "541614",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "541615",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 236.07,
+            "endMilepost": 236.24,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "646937",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "646938",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 248.13,
+            "endMilepost": 248.25,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "647017",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "647018",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 255.6,
+            "endMilepost": 255.72,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "554242",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "554243",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 265.43,
+            "endMilepost": 265.55,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "554238",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "554239",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 278.97,
+            "endMilepost": 279.08,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "623008",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "623010",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 290.87,
+            "endMilepost": 290.98,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357792",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357793",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 299.71,
+            "endMilepost": 299.81,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357800",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357801",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 308.15,
+            "endMilepost": 308.25,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357788",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357789",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 318.61,
+            "endMilepost": 318.71,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357780",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357781",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 326.09,
+            "endMilepost": 326.19,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "402710",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "4027104",
+              "nodeTypeCode": "SUBDIVISION"
+            }
+          }
+        ]
+      }
+    ],
+    "connects": [
+      {
+        "trackName": "CNRT",
+        "trackSegments": [
+          {
+            "beginMilepost": 293.39,
+            "endMilepost": 293.47,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "460128",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "3796684914-152",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 293.47,
+            "endMilepost": 293.68,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3796684914-152",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "4601284",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      }
+    ],
+    "yards": [
+      {
+        "trackName": "YD LD",
+        "trackSegments": [
+          {
+            "beginMilepost": 202.29,
+            "endMilepost": 202.45,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "2338035915-195",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "543492",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 202.45,
+            "endMilepost": 202.84,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "543492",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "357835",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "132",
+        "trackSegments": [
+          {
+            "beginMilepost": 303.19,
+            "endMilepost": 303.41,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357784",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357785",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "134",
+        "trackSegments": [
+          {
+            "beginMilepost": 293.13,
+            "endMilepost": 293.44,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357795",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357797",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "135",
+        "trackSegments": [
+          {
+            "beginMilepost": 293.09,
+            "endMilepost": 293.32,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357794",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357796",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "113",
+        "trackSegments": [
+          {
+            "beginMilepost": 258.98,
+            "endMilepost": 260.01,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "402719",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "402718",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "136",
+        "trackSegments": [
+          {
+            "beginMilepost": 229.73,
+            "endMilepost": 231.53,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357828",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357825",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 318.22,
+            "endMilepost": 318.45,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357774",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357776",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "411",
+        "trackSegments": [
+          {
+            "beginMilepost": 258.57,
+            "endMilepost": 259.13,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357817",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "378903",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "412",
+        "trackSegments": [
+          {
+            "beginMilepost": 258.63,
+            "endMilepost": 258.91,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "460125",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "3796684914-185",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 258.91,
+            "endMilepost": 259.06,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3796684914-185",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "4601254",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "115",
+        "trackSegments": [
+          {
+            "beginMilepost": 271.49,
+            "endMilepost": 271.66,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "4027144",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "402714",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "137",
+        "trackSegments": [
+          {
+            "beginMilepost": 318.22,
+            "endMilepost": 318.45,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357775",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357777",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "401",
+        "trackSegments": [
+          {
+            "beginMilepost": 258.44,
+            "endMilepost": 258.66,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "5032985",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "503298",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 258.66,
+            "endMilepost": 259.02,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "503298",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "503297",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 302.89,
+            "endMilepost": 303.11,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357782",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "357783",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "402",
+        "trackSegments": [
+          {
+            "beginMilepost": 285.82,
+            "endMilepost": 285.97,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3578034",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "357803",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "119",
+        "trackSegments": [
+          {
+            "beginMilepost": 250.54,
+            "endMilepost": 250.93,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357813",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "3578134",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "405",
+        "trackSegments": [
+          {
+            "beginMilepost": 285.81,
+            "endMilepost": 286.14,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357802",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "425306",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 286.14,
+            "endMilepost": 286.16,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "425306",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "3796684914-168",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 286.16,
+            "endMilepost": 286.28,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3796684914-168",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "4253065",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "109",
+        "trackSegments": [
+          {
+            "beginMilepost": 232.13,
+            "endMilepost": 232.29,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "4027244",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "402724",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      }
+    ],
+    "industrials": [
+      {
+        "trackName": "BOONE SCENIC VALLYRR",
+        "trackSegments": [
+          {
+            "beginMilepost": 202.6,
+            "endMilepost": 202.79,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "108537519",
+              "nodeTypeCode": "MILEPOSTEQUATIONBREAK"
+            },
+            "endNode": {
+              "nodeId": "1085375",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "133",
+        "trackSegments": [
+          {
+            "beginMilepost": 219.58,
+            "endMilepost": 219.66,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "2343304352-40",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "490461",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "213",
+        "trackSegments": [
+          {
+            "beginMilepost": 210.9,
+            "endMilepost": 210.99,
+            "isPTC": true,
+            "isEMS": false,
+            "beginNode": {
+              "nodeId": "357829",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "3578294",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "852",
+        "trackSegments": [
+          {
+            "beginMilepost": 246.16,
+            "endMilepost": 247.7,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357823",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "539798",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "853",
+        "trackSegments": [
+          {
+            "beginMilepost": 268.35,
+            "endMilepost": 268.43,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "1357811131",
+              "nodeTypeCode": "OTHER"
+            },
+            "endNode": {
+              "nodeId": "3578114",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "711",
+        "trackSegments": [
+          {
+            "beginMilepost": 277.13,
+            "endMilepost": 277.28,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "378916",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "3789164",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "812",
+        "trackSegments": [
+          {
+            "beginMilepost": 214.15,
+            "endMilepost": 214.39,
+            "isPTC": false,
+            "isEMS": false,
+            "beginNode": {
+              "nodeId": "6959015",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "1920637343-12",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "813",
+        "trackSegments": [
+          {
+            "beginMilepost": 214.18,
+            "endMilepost": 214.31,
+            "isPTC": false,
+            "isEMS": false,
+            "beginNode": {
+              "nodeId": "6959014",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "695901",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "814",
+        "trackSegments": [
+          {
+            "beginMilepost": 219.66,
+            "endMilepost": 219.92,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "490461",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "4904615",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "837",
+        "trackSegments": [
+          {
+            "beginMilepost": 240.69,
+            "endMilepost": 241.03,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3578214",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "3296260469-327",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 241.03,
+            "endMilepost": 241.37,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3296260469-327",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "357821",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "815",
+        "trackSegments": [
+          {
+            "beginMilepost": 219.66,
+            "endMilepost": 219.92,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "490461",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "4904614",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "838",
+        "trackSegments": [
+          {
+            "beginMilepost": 245.72,
+            "endMilepost": 246.01,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "460124",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "3296260469-290",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 246.01,
+            "endMilepost": 246.24,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3296260469-290",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "4601235",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "839",
+        "trackSegments": [
+          {
+            "beginMilepost": 245.72,
+            "endMilepost": 245.96,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "460124",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "464262",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "120",
+        "trackSegments": [
+          {
+            "beginMilepost": 268.11,
+            "endMilepost": 268.35,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357811",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "1357811140",
+              "nodeTypeCode": "OTHER"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "145",
+        "trackSegments": [
+          {
+            "beginMilepost": 286.43,
+            "endMilepost": 286.81,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "9514161",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "4904853",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "740",
+        "trackSegments": [
+          {
+            "beginMilepost": 251.67,
+            "endMilepost": 251.75,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357814",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "2190493",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "840",
+        "trackSegments": [
+          {
+            "beginMilepost": 246,
+            "endMilepost": 246.2,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "460123",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "696176",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "741",
+        "trackSegments": [
+          {
+            "beginMilepost": 251.75,
+            "endMilepost": 251.96,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "2190493",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "2191212",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "841",
+        "trackSegments": [
+          {
+            "beginMilepost": 246.3,
+            "endMilepost": 246.51,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "2190692",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "2190694",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "742",
+        "trackSegments": [
+          {
+            "beginMilepost": 251.75,
+            "endMilepost": 252,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "2190493",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "21912133",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "842",
+        "trackSegments": [
+          {
+            "beginMilepost": 246.28,
+            "endMilepost": 246.48,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "696177",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "2190914",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "843",
+        "trackSegments": [
+          {
+            "beginMilepost": 246.39,
+            "endMilepost": 246.45,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "2187214",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "21872144",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "821",
+        "trackSegments": [
+          {
+            "beginMilepost": 219.42,
+            "endMilepost": 219.63,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "6959024",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "695902",
+              "nodeTypeCode": "ROUTING"
+            }
+          },
+          {
+            "beginMilepost": 224.62,
+            "endMilepost": 224.81,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "4027294",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "402729",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "845",
+        "trackSegments": [
+          {
+            "beginMilepost": 246.48,
+            "endMilepost": 246.51,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "2190914",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "2190694",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 246.51,
+            "endMilepost": 246.76,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "2190694",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "21906943",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "406",
+        "trackSegments": [
+          {
+            "beginMilepost": 286.14,
+            "endMilepost": 286.16,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "425306",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "3796684914-171",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 286.16,
+            "endMilepost": 286.3,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3796684914-171",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "4253064",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "803",
+        "trackSegments": [
+          {
+            "beginMilepost": 321.32,
+            "endMilepost": 321.5,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3789364",
+              "nodeTypeCode": "ENDOFTRACK"
+            },
+            "endNode": {
+              "nodeId": "378936",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "804",
+        "trackSegments": [
+          {
+            "beginMilepost": 312.81,
+            "endMilepost": 313.18,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357773",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "3577734",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "848",
+        "trackSegments": [
+          {
+            "beginMilepost": 246.48,
+            "endMilepost": 246.51,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "2190914",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "3296260469-284",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 246.51,
+            "endMilepost": 246.76,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3296260469-284",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "21909144",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "806",
+        "trackSegments": [
+          {
+            "beginMilepost": 288.7,
+            "endMilepost": 289.03,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "357804",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "3796684914-156",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            }
+          },
+          {
+            "beginMilepost": 289.03,
+            "endMilepost": 289.63,
+            "isPTC": false,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "3796684914-156",
+              "nodeTypeCode": "PTCTYPECHANGE"
+            },
+            "endNode": {
+              "nodeId": "5537575",
+              "nodeTypeCode": "ENDOFTRACK"
+            }
+          }
+        ]
+      },
+      {
+        "trackName": "708",
+        "trackSegments": [
+          {
+            "beginMilepost": 245.67,
+            "endMilepost": 245.72,
+            "isPTC": true,
+            "isEMS": true,
+            "beginNode": {
+              "nodeId": "378895",
+              "nodeTypeCode": "ROUTING"
+            },
+            "endNode": {
+              "nodeId": "460124",
+              "nodeTypeCode": "ROUTING"
+            }
+          }
+        ]
+      }
+    ],
+    "unidentified": []
+  }
+}

@@ -23,10 +23,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.*;
 import com.uprr.psm.core.cache.vo.TrainCacheObjects;
 import com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.*;
+import com.uprr.psm.lsc.bindings.swagger.get.subdivision.mileposts.v1_0.MilepostDataResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j 
+@Slf4j
 public class FilesUtils {
     private static final DateTimeFormatter FILEDATE_PATTERN = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     
@@ -49,12 +50,16 @@ public class FilesUtils {
         return response[0];
     }
     
+    public static MilepostDataResponse loadTrackData(String trackFileName) throws IOException, JsonParseException, JsonMappingException {
+        try (InputStream inputStream = getFileStream(trackFileName)) {
+            return createObjectMapper().readValue(inputStream, MilepostDataResponse.class);
+        }
+    }
+    
     private static TrainCacheObjects[] unzipAndLoadFile(File zipFilePath) throws StreamReadException, DatabindException, IOException {
-        
-        GZIPInputStream zipIn = new GZIPInputStream(new FileInputStream(zipFilePath));
-        TrainCacheObjects[] response = createObjectMapper().readValue(zipIn, TrainCacheObjects[].class);
-        zipIn.close();
-        return response;
+        try (GZIPInputStream zipIn = new GZIPInputStream(new FileInputStream(zipFilePath))) {
+            return createObjectMapper().readValue(zipIn, TrainCacheObjects[].class);
+        }
     }
     
     private static ObjectMapper createObjectMapper() {
@@ -68,8 +73,9 @@ public class FilesUtils {
     }
     
     public static FindTrackNetworkDeviceStateResponse loadDevices(String fileName) throws IOException, JsonParseException, JsonMappingException {
-        InputStream inputStream = getFileStream(fileName);
-        return createObjectMapper().readValue(inputStream, FindTrackNetworkDeviceStateResponse.class);
+        try (InputStream inputStream = getFileStream(fileName)) {
+            return createObjectMapper().readValue(inputStream, FindTrackNetworkDeviceStateResponse.class);
+        }
     }
     
     public static String writeTrainFile(String path, PTCSubdivisionData outputEvent) throws IOException {
@@ -93,7 +99,7 @@ public class FilesUtils {
                 new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
             log.info("Writing the objects of Cache to the dump file");
             log.info(outputEvent.toString());
-            writer.printf(createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(outputEvent));
+            writer.printf(createObjectMapper().writeValueAsString(outputEvent));
             writer.println();
             return filePath;
         } catch (IOException ioe) {
@@ -134,15 +140,15 @@ public class FilesUtils {
     }
     
     public static List<SystemStationType> loadSystemStations(String xmlFileName) {
-        log.info("loading SystemStations: "+xmlFileName);
-        try {
+        log.info("loading SystemStations: " + xmlFileName);
+        try (InputStream fileStream = getFileStream(xmlFileName)) {
             JAXBContext jaxbContext = JAXBContext.newInstance(FindSystemStationReply.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            FindSystemStationReply reply = (FindSystemStationReply) jaxbUnmarshaller.unmarshal(getFileStream(xmlFileName));
+            FindSystemStationReply reply = (FindSystemStationReply) jaxbUnmarshaller.unmarshal(fileStream);
             return reply.getSystemStationList().getSystemStation();
-        } catch (JAXBException e) {
-            log.error("problem reading/parsing file",e);
-            throw new IllegalArgumentException("Unable to read XML File: "+xmlFileName, e);
+        } catch (JAXBException | IOException e) {
+            log.error("problem reading/parsing file", e);
+            throw new IllegalArgumentException("Unable to read XML File: " + xmlFileName, e);
         }
         
     }

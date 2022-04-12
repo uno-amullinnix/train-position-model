@@ -79,6 +79,11 @@
 			<artifactId>ptc-pacing-find-system-station-client-1_0</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.uprr.pac.clients</groupId>
+			<artifactId>ptc-pacing-get-subdivision-mileposts-client</artifactId>
+			<version>1.2.1</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
@@ -95,7 +100,7 @@
 			<groupId>org.glassfish.jaxb</groupId>
 			<artifactId>jaxb-runtime</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>

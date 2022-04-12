@@ -1,7 +1,6 @@
 package com.uprr.pac.convert;
 
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,7 +18,6 @@ import org.openapitools.model.SubdivisionData;
 
 import com.uprr.enterprise.datetime.UTCTimestamp;
 import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.SystemStationType;
-import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.FindSystemStationRequest.SearchCriteria.SystemStationIdList;
 import com.uprr.psm.core.cache.vo.TrainCacheObjects;
 import com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.*;
 import com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.DeviceData;
@@ -227,8 +225,10 @@ public class FilesConverter {
     }
 
     private List<MilepostSegmentStateType> createMilepostSegmentList(TrainCacheObjects trainCache) {
-        // TODO Auto-generated method stub
-        return null;
+        List<MilepostSegmentStateType> milepostStateList = new ArrayList<>();
+        MilepostSegmentStateType segmentState = new MilepostSegmentStateType();
+        return milepostStateList;
     }
+
     
 }

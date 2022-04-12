@@ -2,7 +2,7 @@ package com.uprr.pac.handler.common;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.File;
+import java.io.*;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -10,10 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.openapitools.model.*;
 import org.openapitools.model.MilepostType;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.SystemStationType;
 import com.uprr.psm.core.cache.vo.*;
 import com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.SubdivisionStateData;
 import com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.*;
+import com.uprr.psm.lsc.bindings.swagger.get.subdivision.mileposts.v1_0.MilepostDataResponse;
 
 class FilesUtilsTest {
     
@@ -42,6 +45,12 @@ class FilesUtilsTest {
         CacheMetadata trainData = trainCache.getMetadata();
         Collection<SubdivisionStateData> events = trainCache.getData();
         assertThat(events).isNotEmpty();
+    }
+    @Test
+    void testLoadTrackData() throws Exception {
+        MilepostDataResponse trackData = FilesUtils.loadTrackData("/boone-track-data.json");
+        assertThat(trackData).isNotNull();
+        assertThat(trackData.getSubdivisionName()).isEqualTo("Boone");
     }
     @Test
     void testWriteTrainFile() throws Exception {
