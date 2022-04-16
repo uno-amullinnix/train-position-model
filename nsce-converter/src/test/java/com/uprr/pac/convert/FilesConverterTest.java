@@ -26,7 +26,7 @@ class FilesConverterTest {
         MilepostDataResponse milepostDataResponse = FilesUtils.loadTrackData("/boone-track-data.json");
         SubdivisionTrackRange trackRange = new SubdivisionTrackRangeImpl(milepostDataResponse);
         FilesConverter converter = new FilesConverter(FilesUtils.loadDevices("/boone-devices.json"),FilesUtils.loadSystemStations("/boone-stations.xml"), trackRange);
-        List<File> files = FilesUtils.getFilesInDirectory("network-events");
+        List<File> files = FilesUtils.getFilesInDirectory("network-events-old");
         assertThat(files).isNotEmpty();
         for (File file : files) {
             TrainCacheObjects trainCache = FilesUtils.loadNetworkStateEvent(file);
