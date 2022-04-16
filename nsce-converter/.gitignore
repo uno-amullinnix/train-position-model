@@ -22,3 +22,5 @@ bin/
 logs/
 network-events/
 test-train-events/
+test-network-events/
+network-events-old/

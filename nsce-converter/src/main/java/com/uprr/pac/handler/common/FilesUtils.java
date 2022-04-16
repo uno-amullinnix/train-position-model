@@ -14,6 +14,7 @@ import javax.xml.bind.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openapitools.model.PTCSubdivisionData;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.*;
@@ -65,10 +66,12 @@ public class FilesUtils {
     private static ObjectMapper createObjectMapper() {
         JsonMapper mapper = JsonMapper.builder()
                 .addModule(new JavaTimeModule())
+                
                 .build();
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         // StdDateFormat is ISO8601 since jackson 2.9
         mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
+        mapper.setSerializationInclusion(Include.NON_NULL);
         return mapper;
     }
     

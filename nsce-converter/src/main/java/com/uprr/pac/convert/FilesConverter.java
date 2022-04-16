@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.openapitools.model.*;
 import org.openapitools.model.AOTUActivity;
 import org.openapitools.model.AOTURouteLocation;
@@ -18,6 +19,8 @@ import org.openapitools.model.SubdivisionData;
 
 import com.uprr.enterprise.datetime.UTCTimestamp;
 import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.SystemStationType;
+import com.uprr.pac.clients.track.span.SpanningMilepostSequence;
+import com.uprr.pac.clients.track.state.SubdivisionTrackRange;
 import com.uprr.psm.core.cache.vo.TrainCacheObjects;
 import com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.*;
 import com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.DeviceData;
@@ -25,22 +28,47 @@ import com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.Fi
 
 public class FilesConverter {
     private static final String DIRECTION_MP_DECREASING = "2";
-    private Map<String, DeviceData> subdivisionDevicesMap;
+    private Map<Pair<Long, Integer>, DeviceData> subdivisionDevicesMap;
     private Map<Integer, SystemStationType> systemStationsMap;
     private String subdivisionName;
+    private Map<String, List<Integer>> trackMilepostMap;
     private Integer subdivisionId;
     
-    public FilesConverter(FindTrackNetworkDeviceStateResponse subdivDevices, List<SystemStationType> subdivisionStations) {
+    public FilesConverter(FindTrackNetworkDeviceStateResponse subdivDevices, List<SystemStationType> subdivisionStations, SubdivisionTrackRange trackRange) {
         this.subdivisionName = subdivDevices.getSubdivisionName();
         this.subdivisionId = Integer.valueOf(subdivDevices.getDeviceList().get(0).getSubdivisionId());
+        createTrackMilepostMap(trackRange);
+        
         subdivisionDevicesMap = subdivDevices.getDeviceList().stream()
-                .filter(d -> StringUtils.isNotBlank(d.getDataSourceId()))
-                .collect(Collectors.toMap(DeviceData::getDataSourceId, Function.identity(),
+                .filter(d -> (d.getWiuId() != null && d.getWiuStatusIndex() != null
+                        && trackMilepostMap.containsKey(d.getTrackName().toUpperCase())
+                        && d.getDeviceTypeCode() > 0 && d.getDeviceTypeCode() < 3)
+                        && d.getDeviceMilepost() != null)
+                .collect(Collectors.toMap(d -> Pair.of(d.getWiuId(), d.getWiuStatusIndex()), Function.identity(),
                         (existing, replacement) -> existing));
         systemStationsMap = subdivisionStations.stream()
                 .collect(Collectors.toMap(SystemStationType::getSystemStationId, Function.identity(),
                         (existing, replacement) -> existing));
         System.out.println("Started");
+    }
+    
+    private void createTrackMilepostMap(SubdivisionTrackRange trackRange) {
+        trackMilepostMap = new HashMap<>();
+        trackRange.getAllTrackNames().stream()
+                .forEach(trackName -> trackRange.findMilepostRangesForTrack(trackName).stream()
+                        .forEach(range -> range.getMilepostSpanList().stream()
+                                .forEach(span -> addMileposts(trackName, span.getLowestMilepost(), span.getHighestMilepost()))));
+    }
+    
+    private void addMileposts(String trackName, double start, double end) {
+        List<Integer> milepostList = trackMilepostMap.get(trackName);
+        if (milepostList == null) {
+            milepostList = new ArrayList<>();
+            trackMilepostMap.put(trackName.toUpperCase(), milepostList);
+        }
+        for (int i = Double.valueOf(start).intValue(); i < Double.valueOf(end).intValue(); i++) {
+            milepostList.add(i);
+        }
     }
     
     public PTCSubdivisionData convertPulseModel(TrainCacheObjects trainCache) {
@@ -104,7 +132,7 @@ public class FilesConverter {
                 .map(p -> new TrainPositionReport()
                         .milepostLocation(createMilepostLocationType(p.getHeadEndLocation()))
                         .positionTime(convertUTCTimestamp(p.getAuditData().getEventCreatedDateTime()))
-                        .speedMPH(computeSpeed(p.getSpeed(), p.getDirectionOfTravel())))                        
+                        .speedMPH(computeSpeed(p.getSpeed(), p.getDirectionOfTravel())))
                 .collect(Collectors.toList());
     }
     
@@ -180,7 +208,7 @@ public class FilesConverter {
                         .activityList(createActivities(l.getActivityList()))
                         .isEventLocation(l.getIsEventLocation())
                         .locationId(l.getLocationId())
-                        .subdivisionId(this.subdivisionId)  //we will eliminate any others
+                        .subdivisionId(this.subdivisionId) // we will eliminate any others
                         .milepost(lookupMilepost(l.getSystemStationId()))
                         .routeSequence(l.getRouteSequence())
                         .stationType(l.getStationType()))
@@ -204,13 +232,9 @@ public class FilesConverter {
                 .orElse(null);
     }
     
-    
     private MilepostType lookupMilepost(Integer systemStationId) {
         if (systemStationId == null) {
             return null;
-        }
-        if (systemStationId.equals(1282)) {
-          System.out.println("BOONE");  
         }
         SystemStationType station = systemStationsMap.get(systemStationId);
         if (station == null) {
@@ -223,12 +247,90 @@ public class FilesConverter {
         // TODO Auto-generated method stub
         return null;
     }
-
+    
     private List<MilepostSegmentStateType> createMilepostSegmentList(TrainCacheObjects trainCache) {
-        List<MilepostSegmentStateType> milepostStateList = new ArrayList<>();
-        MilepostSegmentStateType segmentState = new MilepostSegmentStateType();
-        return milepostStateList;
+        Map<Pair<String, Integer>, MilepostSegmentStateType> segmentMap = new HashMap<>();
+        trainCache.getData().get(0).getDeviceList().stream().forEach(device -> processDevice(segmentMap, device));
+        return segmentMap.values().stream()
+            .sorted(Comparator.comparing(m -> Pair.of(m.getTrackName(), m.getMilepost().getMilepostNumber())))
+            .collect(Collectors.toList());        
+    }
+    
+    private void processDevice(Map<Pair<String, Integer>, MilepostSegmentStateType> segmentMap,
+            com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.DeviceData device) {
+        DeviceData thisDevice = subdivisionDevicesMap.get(Pair.of(device.getWiuId(), device.getWiuStatusIndex()));
+        if (thisDevice == null) {
+            return;
+        }
+        Pair<String, Integer> milepostKey = Pair.of(thisDevice.getTrackName(), thisDevice.getDeviceMilepost().getMilepost().intValue());
+        MilepostSegmentStateType mpSegment = segmentMap.get(milepostKey);
+        if (mpSegment == null) {
+            mpSegment = new MilepostSegmentStateType();
+            mpSegment.setMilepost(createMilepost(thisDevice.getDeviceMilepost()));
+            mpSegment.setTrackName(thisDevice.getTrackName());
+            segmentMap.put(milepostKey, mpSegment);
+        }
+        if (thisDevice.getDeviceTypeCode() == 1) {
+            mpSegment.addSignalListItem(createSignalItem(thisDevice, device));
+        } else if (thisDevice.getDeviceTypeCode() == 2) {
+            mpSegment.addSwitchListItem(createSwitch(thisDevice, device));
+        }
+    }
+    
+    private MilepostType createMilepost(com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.@Valid MilepostType deviceMilepost) {
+        return new MilepostType().milepostNumber(Integer.valueOf(deviceMilepost.getMilepost().intValue()).floatValue())
+                .milepostPrefix(deviceMilepost.getMilepostPrefix())
+                .milepostSuffix(deviceMilepost.getMilepostSuffix());
     }
 
+    private SwitchStateType createSwitch(DeviceData thisDevice, com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.DeviceData device) {
+        return new SwitchStateType()
+                .milepostLocation(createMP(thisDevice.getDeviceMilepost()))
+                .switchState(convertSwitchState(thisDevice, device));
+    }
+    
+    private Integer convertSwitchState(DeviceData thisDevice, com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.DeviceData device) {
+        int state = 0;
+        if (device.getRawDeviceStatusCode() < 3) {
+            state = device.getRawDeviceStatusCode();
+        }
+        int facing = thisDevice.getFacingDirectionCode();
+        if (facing == 2 || facing == 4) {
+            state = state *-1;
+        }
+        state = state * facingMultiplier(thisDevice.getFacingDirectionCode());
+        return state;
+    }
+
+    private int facingMultiplier(int facing) {
+        if (facing == 2 || facing == 4) {
+             return -1;
+        }
+        return 1;
+    }
+
+    private MilepostType createMP(com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.@Valid MilepostType deviceMilepost) {
+        return new MilepostType().milepostNumber(deviceMilepost.getMilepost())
+                .milepostPrefix(deviceMilepost.getMilepostPrefix())
+                .milepostSuffix(deviceMilepost.getMilepostSuffix());
+    }
+
+    private SignalStateType createSignalItem(DeviceData thisDevice, com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.DeviceData device) {
+        return new SignalStateType()
+                .milepostLocation(createMP(thisDevice.getDeviceMilepost()))
+                .signalState(convertSignalState(thisDevice,device));
+    }
+
+    private Integer convertSignalState(DeviceData thisDevice, com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.DeviceData device) {
+        int state = device.getNormalizedDeviceStatusCode();
+        if (state == 6) {
+            state = 0;
+        }
+        if (state > 3) {
+            state = state - 1;
+        }
+        state = state * facingMultiplier(thisDevice.getFacingDirectionCode());
+        return state;
+    }
     
 }
