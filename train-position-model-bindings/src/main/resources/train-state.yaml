@@ -105,6 +105,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TrainPositionReport'          
+        trainActualPositionList:
+          description: 'The list contains the ACTUAL positions of the train every 2 minutes for the next (2) hours'
+          type: array
+          items:
+            $ref: '#/components/schemas/TrainPositionReport'          
       required:
       - ptcLocomotiveId
 
@@ -159,14 +164,6 @@ components:
           description: >-
             The milepost location of this location such that 101.25 => 1/4 of the distance between 101 and 102 note - this does NOT signify a distance of 1/4 mile!  The distance between milepost markers varies at roughly around a mile, but the marker location is not guaranteed to be at exactly a mile (due to terrain and positioning complications).  However the locations of the mileposts very rarely change and thus are still useful in position forecasting. 
           example: 58.81
-        milepostPrefix:
-          type: string
-          description: 'The prefix of the nearest milepost for this Location'
-          example: A
-        milepostSuffix:
-          type: string
-          description: 'The suffix of the nearest milepost for this Location'
-          example: S
       required:
         - milepost
         

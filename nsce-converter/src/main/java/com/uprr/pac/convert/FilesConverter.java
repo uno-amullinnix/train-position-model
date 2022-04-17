@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openapitools.model.*;
 import org.openapitools.model.AOTUActivity;
@@ -19,7 +18,6 @@ import org.openapitools.model.SubdivisionData;
 
 import com.uprr.enterprise.datetime.UTCTimestamp;
 import com.uprr.netcontrol.shared.xml_bindings.jaxb2.location.find_system_station_2_2.SystemStationType;
-import com.uprr.pac.clients.track.span.SpanningMilepostSequence;
 import com.uprr.pac.clients.track.state.SubdivisionTrackRange;
 import com.uprr.psm.core.cache.vo.TrainCacheObjects;
 import com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.*;
@@ -156,9 +154,7 @@ public class FilesConverter {
     
     private MilepostType createMilepostType(com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.@Valid MilepostType locationMilepost) {
         return new MilepostType()
-                .milepostNumber(locationMilepost.getMilepost().floatValue())
-                .milepostPrefix(locationMilepost.getMilepostPrefix())
-                .milepostSuffix(locationMilepost.getMilepostSuffix());
+                .milepostNumber(locationMilepost.getMilepost().floatValue());
     }
     
     private List<LocomotiveStatusReport> createLocomotiveList(PTCTrainData trainData) {
@@ -251,6 +247,7 @@ public class FilesConverter {
     private List<MilepostSegmentStateType> createMilepostSegmentList(TrainCacheObjects trainCache) {
         Map<Pair<String, Integer>, MilepostSegmentStateType> segmentMap = new HashMap<>();
         trainCache.getData().get(0).getDeviceList().stream().forEach(device -> processDevice(segmentMap, device));
+        //TODO - trains
         return segmentMap.values().stream()
             .sorted(Comparator.comparing(m -> Pair.of(m.getTrackName(), m.getMilepost().getMilepostNumber())))
             .collect(Collectors.toList());        
@@ -278,9 +275,7 @@ public class FilesConverter {
     }
     
     private MilepostType createMilepost(com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.@Valid MilepostType deviceMilepost) {
-        return new MilepostType().milepostNumber(Integer.valueOf(deviceMilepost.getMilepost().intValue()).floatValue())
-                .milepostPrefix(deviceMilepost.getMilepostPrefix())
-                .milepostSuffix(deviceMilepost.getMilepostSuffix());
+        return new MilepostType().milepostNumber(Integer.valueOf(deviceMilepost.getMilepost().intValue()).floatValue());
     }
 
     private SwitchStateType createSwitch(DeviceData thisDevice, com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.DeviceData device) {
@@ -310,9 +305,7 @@ public class FilesConverter {
     }
 
     private MilepostType createMP(com.uprr.psm.lsc.bindings.swagger.find.track.network.device.state.v1_0.@Valid MilepostType deviceMilepost) {
-        return new MilepostType().milepostNumber(deviceMilepost.getMilepost())
-                .milepostPrefix(deviceMilepost.getMilepostPrefix())
-                .milepostSuffix(deviceMilepost.getMilepostSuffix());
+        return new MilepostType().milepostNumber(deviceMilepost.getMilepost());
     }
 
     private SignalStateType createSignalItem(DeviceData thisDevice, com.uprr.psm.lsc.bindings.swagger.find.subdivision.state.v1_0.DeviceData device) {

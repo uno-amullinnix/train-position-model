@@ -48,6 +48,7 @@ public class FilesUtils {
             response = createObjectMapper().readValue(fileName, TrainCacheObjects[].class);
         }
         assert (response.length == 1);
+        System.out.println("loaded "+fileName);
         return response[0];
     }
     
@@ -97,6 +98,9 @@ public class FilesUtils {
         if (!f.exists()) {
             f.getParentFile().mkdirs();
         }
+        System.out.println(outputEvent.getLastTrainReporting().getTrainId().getTrainSymbol()+"-"+
+                outputEvent.getLastTrainReporting().getTrainId().getTrainDate()+"_"+
+                outputEvent.getLastTrainReporting().getLastReportedPosition().getPositionTime().format(DateTimeFormatter.ISO_DATE_TIME));
         
         try (PrintWriter writer = new PrintWriter(
                 new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
