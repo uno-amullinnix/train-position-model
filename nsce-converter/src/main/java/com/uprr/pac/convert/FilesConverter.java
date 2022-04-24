@@ -142,7 +142,8 @@ public class FilesConverter {
         if (positionTime == null) {
             return null;
         }
-        return OffsetDateTime.ofInstant(Instant.ofEpochMilli(positionTime.getTimeInMillis()), ZoneOffset.UTC);
+        ZoneId utc = ZoneId.of("UTC");
+        return OffsetDateTime.ofInstant(Instant.ofEpochMilli(positionTime.getTimeInMillis()), utc);
     }
     
     private MilepostLocationType createMilepostLocationType(@Valid PTCLocationData headEndLocation) {
@@ -240,10 +241,25 @@ public class FilesConverter {
     }
     
     private List<TrainPositionReport> createTrainEstimatedPositionList(PTCTrainData trainData) {
-        // TODO Auto-generated method stub
-        return null;
+        return trainData.getTrainEstimatedPositionList().stream()
+                .map(estimate -> processEstimate(estimate))
+                .collect(Collectors.toList());
+        
     }
     
+    private TrainPositionReport processEstimate(LocomotivePositionReport estimate) {
+        if (estimate.getHeadEndLocation() == null) {
+            return null;
+        }
+        return new TrainPositionReport()
+                .milepostLocation(new MilepostLocationType()
+                        .milepost(createMilepostType(estimate.getHeadEndLocation().getLocationMilepost()))
+                        .subdivisionId(estimate.getHeadEndLocation().getSubdivisionId())
+                        .trackName(estimate.getHeadEndLocation().getTrackName()))
+                .positionTime(convertUTCTimestamp(estimate.getPositionTime()))
+                .speedMPH(computeSpeed(estimate.getSpeed(),estimate.getDirectionOfTravel()));
+    }
+
     private List<MilepostSegmentStateType> createMilepostSegmentList(TrainCacheObjects trainCache) {
         Map<Pair<String, Integer>, MilepostSegmentStateType> segmentMap = new HashMap<>();
         trainCache.getData().get(0).getDeviceList().stream().forEach(device -> processDevice(segmentMap, device));
