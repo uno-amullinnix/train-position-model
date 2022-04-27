@@ -6,6 +6,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.openapitools.model.*;
 
 import com.uprr.pac.handler.common.FilesUtils;
@@ -13,6 +16,7 @@ import com.uprr.psm.core.cache.vo.TrainCacheObjects;
 
 public class TrainDataGenerator {
 
+    private static final boolean SHOW_SIGNALS = true;
     private FilesConverter converter;
 
     public TrainDataGenerator(FilesConverter converter) {
@@ -57,7 +61,9 @@ public class TrainDataGenerator {
     
     private List<PTCSubdivisionData> computeActualTimes(Map<LocalDateTime, PTCSubdivisionData> trainMap) {
         List<LocalDateTime> reportingTimes = trainMap.keySet().stream().sorted().collect(Collectors.toList());
-        return trainMap.values().stream().sorted((t1, t2) -> t1.getLastTrainReporting().getLastReportedPosition().getPositionTime().compareTo(t2.getLastTrainReporting().getLastReportedPosition().getPositionTime())).map(trainData -> computeActuals(trainData, reportingTimes, trainMap))
+        return trainMap.values().stream()
+                .sorted((t1, t2) -> t1.getLastTrainReporting().getLastReportedPosition().getPositionTime().compareTo(t2.getLastTrainReporting().getLastReportedPosition().getPositionTime()))
+                .map(trainData -> computeActuals(trainData, reportingTimes, trainMap))
                 .collect(Collectors.toList());
     }
 
@@ -68,12 +74,39 @@ public class TrainDataGenerator {
             int start = reportingTimes.indexOf(timeOfReporting);
             for (int i = start; i < reportingTimes.size() - 1; i++) {
                 if (reportingTimes.get(i).isBefore(forecastTime) && reportingTimes.get(i+1).isAfter(forecastTime)) {
-                    TrainPositionReport actual = computeLocation(forecastTime, trainMap.get(reportingTimes.get(i)), trainMap.get(reportingTimes.get(i+1)));
+                    PTCSubdivisionData prevReporting = trainMap.get(reportingTimes.get(i));
+                    PTCSubdivisionData nextReporting = trainMap.get(reportingTimes.get(i+1));
+                    TrainPositionReport actual = computeLocation(forecastTime, prevReporting, nextReporting);
+                    if (SHOW_SIGNALS) {
+                        setSignals(prevReporting, nextReporting, actual); 
+                    }
                     trainData.getLastTrainReporting().addTrainActualPositionListItem(actual);
                 }
             }
         }
         return trainData;
+    }
+
+    private void setSignals(PTCSubdivisionData prevReporting, PTCSubdivisionData nextReporting, TrainPositionReport actual) {
+        SignalStateType prevSignal = nextReporting.getLastTrainReporting().getLastReportedPosition().getPrecedingSignalState();
+        SignalStateType nextSignal = prevReporting.getLastTrainReporting().getLastReportedPosition().getNextSignalState();
+        if (actual.getSpeedMPH() > 0) {
+            if (prevSignal == null || prevSignal.getMilepostLocation().getMilepostNumber() > actual.getMilepostLocation().getMilepost().getMilepostNumber()) {
+                prevSignal = prevReporting.getLastTrainReporting().getLastReportedPosition().getPrecedingSignalState();
+            }
+            if (nextSignal == null || nextSignal.getMilepostLocation().getMilepostNumber() < actual.getMilepostLocation().getMilepost().getMilepostNumber()) {
+                nextSignal = nextReporting.getLastTrainReporting().getLastReportedPosition().getNextSignalState();
+            }
+        } else {
+            if (prevSignal == null || prevSignal.getMilepostLocation().getMilepostNumber() < actual.getMilepostLocation().getMilepost().getMilepostNumber()) {
+                prevSignal = prevReporting.getLastTrainReporting().getLastReportedPosition().getPrecedingSignalState();
+            }
+            if (nextSignal == null || nextSignal.getMilepostLocation().getMilepostNumber() > actual.getMilepostLocation().getMilepost().getMilepostNumber()) {
+                nextSignal = nextReporting.getLastTrainReporting().getLastReportedPosition().getNextSignalState();
+            }
+        }
+        actual.setPrecedingSignalState(prevSignal);
+        actual.setNextSignalState(nextSignal);
     }
 
     private TrainPositionReport computeLocation(LocalDateTime forecastTime, PTCSubdivisionData prevReporting, PTCSubdivisionData nextReporting) {
@@ -92,9 +125,13 @@ public class TrainDataGenerator {
             closestMilepostLocation = prevLastReportedPosition.getMilepostLocation();
             tpr.setReversing(prevLastReportedPosition.getReversing());
         }
+        String trackName = prevLastReportedPosition.getMilepostLocation().getTrackName();
+        if (!nextLastReportedPosition.getMilepostLocation().getTrackName().equals(trackName)) {
+            trackName = trackName +"-"+nextLastReportedPosition.getMilepostLocation().getTrackName();
+        }
         MilepostLocationType milepostLocation = new MilepostLocationType()
                 .subdivisionId(closestMilepostLocation.getSubdivisionId())
-                .trackName(closestMilepostLocation.getTrackName());  //we'll assuming it's on the track of the closest location - not always true, but sufficient
+                .trackName(trackName);  
         
         Float forecastMilepostNumber = computeForecastMilepostNumber(prevLastReportedPosition, nextLastReportedPosition, secondsFromPrev, secondsToNext);
         milepostLocation.setMilepost(new MilepostType().milepostNumber(forecastMilepostNumber));

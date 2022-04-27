@@ -25,6 +25,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MilepostSegmentStateType'  
+
     TrainStateType:
       type: object
       properties:
@@ -115,7 +116,7 @@ components:
 
     TrainPositionReport:
       description: >- 
-        The Location and Speed of a given train at a given time
+        The Location and Speed of a given train at a given time.  The preceding and next signal state indicate the state of the signal last passed and the signal the train is approaching (if any, in this subdiv)
       type: object
       properties:
         positionTime:        
@@ -137,9 +138,13 @@ components:
           description: ' Indicates that the train is moving backwards (e.g., the lead locomotive is pushing the train - this is very uncommon).'
           type: number
           format: boolean
+        precedingSignalState:
+          $ref: '#/components/schemas/SignalStateType'
+        nextSignalState:
+          $ref: '#/components/schemas/SignalStateType'
       required: 
       - positionTime
-      
+
     MilepostLocationType:
       description: 'Details of a Location on the rail network. If the locomotive does not have a track location, the head end and rear end location fields are populated with zero.'
       type: object
@@ -154,7 +159,7 @@ components:
       - subdivisionId
       - trackName
       - locationMilepost
-    
+
     MilepostType:
       type: object
       properties:
@@ -446,27 +451,48 @@ components:
           type: integer
           description: >-
             The switch State indicates *both* the switch direction state
-            0 == UNKNOWN/Switching (the state is changing or not known)
             1 == facing milepost increasing and set to remain on this train
             -1 == facing milepost decreasing and set to remain on this train
             2 == facing milepost increasing, but switched to leave this track (trains moving milepost increasing will leave this track)
             -2 == facing milepost decreasing, and switched to leave this track (trains moving milepost decreasing will leave this track)
-    
+            9,-9 == UNKNOWN/Switching (the state is changing or not known)
+            
     SignalStateType:
       description: 'The State of a Track Signal'
       type: object
       properties:
         milepostLocation:
           $ref: '#/components/schemas/MilepostType'
-        signalState:
+        previousSignalState:
           type: integer
           description: >-
-            signal state indicates *both* the signal indication and direction
-            0 = dark
+            This is the PREVIOUS State of this Signal.
+            Signal state indicates *both* the signal indication and direction
             1 = RED     (STOP)for trains moving MP increasing (e.g. the signal is facing train moving in the MP increasing direction, so trains moving MP increasing must STOP (technically it is facing MP decreasing)
             2 = YELLOW  (APPROACH) for trains moving MP increasing
             3 = FLASHING_YELLOW (ADVANCE-APPROACH) for trains moving MP increasing
             4 = GREEN   (CLEAR) for trains moving MP increasing
+            9 =  dark/unknown
             -1 = RED    (STOP)for trains moving MP decreasing (e.g. the signal is facing trains moving in the MP decreasing direction (technically it is facing MP increasing)
             -2 = YELLOW (APPROACH) for trains moving MP decreasing
             -3 = FLASHING_YELLOW (ADVANCE-APPROACH) for trains moving MP decreasing
+            -9 =  dark/unknown
+        currentStateTime:        
+          description: 'The date and time (in UTC) the signal changed to its current state'
+          type: string
+          format: date-time
+          example: '2021-02-19T18:38:58.477Z'
+        signalState:
+          type: integer
+          description: >-
+            This is the CURRENT State of this Signal.
+            signal state indicates *both* the signal indication and direction
+            1 = RED     (STOP)for trains moving MP increasing (e.g. the signal is facing train moving in the MP increasing direction, so trains moving MP increasing must STOP (technically it is facing MP decreasing)
+            2 = YELLOW  (APPROACH) for trains moving MP increasing
+            3 = FLASHING_YELLOW (ADVANCE-APPROACH) for trains moving MP increasing
+            4 = GREEN   (CLEAR) for trains moving MP increasing
+            9 = dark/unknown
+            -1 = RED    (STOP)for trains moving MP decreasing (e.g. the signal is facing trains moving in the MP decreasing direction (technically it is facing MP increasing)
+            -2 = YELLOW (APPROACH) for trains moving MP decreasing
+            -3 = FLASHING_YELLOW (ADVANCE-APPROACH) for trains moving MP decreasing
+            -9 = dark/unknown
